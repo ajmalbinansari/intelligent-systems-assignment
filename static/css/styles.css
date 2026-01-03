@@ -1,0 +1,175 @@
+/* 
+ * Custom styles for Plant Disease Detection application
+ */
+
+/* General styles */
+body {
+    font-family: 'Open Sans', sans-serif;
+    color: #333;
+    line-height: 1.6;
+    background-color: #f8f9fa;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.text-success {
+    color: #28a745 !important;
+}
+
+.bg-success {
+    background-color: #28a745 !important;
+}
+
+.btn-success {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.btn-success:hover {
+    background-color: #218838;
+    border-color: #1e7e34;
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-brand {
+    font-weight: 700;
+}
+
+.navbar-dark .navbar-nav .nav-link.active {
+    font-weight: 600;
+}
+
+/* Cards */
+.card {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    font-weight: 600;
+}
+
+.border-success {
+    border-color: #28a745 !important;
+}
+
+/* Detection page */
+#dropArea {
+    border: 3px dashed #28a745;
+    border-radius: 10px;
+    padding: 40px;
+    text-align: center;
+    background-color: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+#dropArea:hover, #dropArea.highlight {
+    background-color: #e2f3e5;
+}
+
+#preview {
+    max-width: 100%;
+    max-height: 300px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.result-box {
+    border-left: 5px solid #28a745;
+    padding-left: 15px;
+    background-color: #f8f9fa;
+    border-radius: 4px;
+}
+
+.confidence-bar {
+    height: 20px;
+    background-color: #28a745;
+    border-radius: 4px;
+}
+
+.progress-label {
+    line-height: 20px;
+    color: white;
+    padding-left: 5px;
+    font-weight: 600;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* About page */
+.resource-link {
+    color: #28a745;
+    text-decoration: none;
+}
+
+.resource-link:hover {
+    text-decoration: underline;
+}
+
+/* Disease information page */
+.disease-card {
+    transition: transform 0.3s ease;
+}
+
+.disease-card:hover {
+    transform: translateY(-5px);
+}
+
+.disease-image {
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .card-header h5 {
+        font-size: 1rem;
+    }
+    
+    h2 {
+        font-size: 1.8rem;
+    }
+    
+    h3 {
+        font-size: 1.5rem;
+    }
+    
+    #dropArea {
+        padding: 20px;
+    }
+}
+
+/* Footer */
+footer {
+    margin-top: 3rem;
+    border-top: 1px solid #e9ecef;
+}
+
+/* Animation for loading */
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.spinner-border {
+    animation: spin 1s linear infinite;
+}
+
+/* Toast notifications */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1050;
+}

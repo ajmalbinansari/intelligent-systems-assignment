@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Training Information - Plant Disease Detection{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h2 class="text-center mb-4">Model Training Information</h2>
+        
+        <div class="alert alert-info">
+            <h4 class="alert-heading">Model Not Loaded</h4>
+            <p>
+                The plant disease detection model is not currently loaded or needs to be trained.
+                Follow the instructions below to train the model.
+            </p>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">Training Instructions</h3>
+            </div>
+            <div class="card-body">
+                <h5>Step 1: Download the Dataset</h5>
+                <p>
+                    Download the PlantVillage dataset from 
+                    <a href="https://www.kaggle.com/datasets/abdallahalidev/plantvillage-dataset" target="_blank">Kaggle</a>.
+                </p>
+                <p>Alternatively, if you have the Kaggle API configured, run:</p>
+                <div class="bg-light p-3 mb-3 rounded">
+                    <code>kaggle datasets download -d abdallahalidev/plantvillage-dataset</code><br>
+                    <code>unzip plantvillage-dataset.zip -d dataset/</code>
+                </div>
+                
+                <h5>Step 2: Train the Model</h5>
+                <p>Run the training script from the command line:</p>
+                <div class="bg-light p-3 mb-3 rounded">
+                    <code>python train_model.py</code>
+                </div>
+                <p>
+                    If you want to force retraining even if a model already exists, use the <code>--force</code> flag:
+                </p>
+                <div class="bg-light p-3 mb-3 rounded">
+                    <code>python train_model.py --force</code>
+                </div>
+                
+                <h5>Step 3: Restart the Server</h5>
+                <p>
+                    After training is complete, restart the Flask server to load the newly trained model.
+                </p>
+                <div class="bg-light p-3 mb-3 rounded">
+                    <code>Ctrl+C</code> (to stop the current server)<br>
+                    <code>python app.py</code> (to start it again)
+                </div>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">Training Process</h3>
+            </div>
+            <div class="card-body">
+                <p>
+                    The training process follows these steps:
+                </p>
+                
+                <ol class="list-group list-group-numbered mb-4">
+                    <li class="list-group-item">Data preprocessing and augmentation</li>
+                    <li class="list-group-item">Loading a pre-trained EfficientNet-B0 model</li>
+                    <li class="list-group-item">Freezing the feature extraction layers</li>
+                    <li class="list-group-item">Training a new classifier head for plant disease classes</li>
+                    <li class="list-group-item">Fine-tuning the later layers for better performance</li>
+                    <li class="list-group-item">Saving the best model based on validation accuracy</li>
+                </ol>
+                
+                <p>
+                    The training script will generate these files:
+                </p>
+                
+                <ul class="list-group mb-3">
+                    <li class="list-group-item"><code>best_model.pth</code> - The trained model weights</li>
+                    <li class="list-group-item"><code>class_indices.npy</code> - Mapping between class names and indices</li>
+                    <li class="list-group-item"><code>model_metadata.json</code> - Information about the model</li>
+                    <li class="list-group-item"><code>training_history.png</code> - Plot of training metrics</li>
+                </ul>
+                
+                <p>
+                    Training typically takes 30-60 minutes depending on your hardware. If you have a GPU,
+                    the training process will automatically utilize it to speed up training.
+                </p>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h3 class="mb-0">System Requirements</h3>
+            </div>
+            <div class="card-body">
+                <h5>Minimum Requirements</h5>
+                <ul>
+                    <li>Python 3.8+</li>
+                    <li>PyTorch 1.12+</li>
+                    <li>4GB RAM</li>
+                    <li>5GB disk space (for code, model, and dataset)</li>
+                </ul>
+                
+                <h5>Recommended Requirements</h5>
+                <ul>
+                    <li>8GB+ RAM</li>
+                    <li>CUDA-compatible GPU or Apple Silicon (M models) for faster training</li>
+                    <li>10GB+ disk space</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

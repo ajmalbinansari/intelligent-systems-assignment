@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block title %}Plant Diseases Information - Plant Disease Detection{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h2 class="text-center mb-4">Plant Disease Information</h2>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <p class="lead">
+                    This section provides information about common plant diseases that our system can detect.
+                    Each entry includes symptoms, causes, and management strategies to help you maintain
+                    healthy plants and crops.
+                </p>
+            </div>
+        </div>
+        
+        <!-- Disease 1: Tomato Late Blight -->
+        <div class="card mb-4 border-success">
+            <div class="card-header bg-success text-white">
+                <h3 class="card-title mb-0">Tomato Late Blight</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">A devastating disease caused by the pathogen Phytophthora infestans.</p>
+                
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Symptoms</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Dark brown spots on leaves with pale green borders. White fungal growth may appear on undersides in humid conditions. Stems and fruits can also be infected.</p>
+                                <div class="text-center">
+                                    <img src="{{ url_for('static', filename='images/diseases/tomato_late_blight.jpg') }}" alt="Tomato Late Blight" class="img-fluid rounded" style="max-height: 200px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Management</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li>Remove infected plants promptly</li>
+                                    <li>Improve air circulation</li>
+                                    <li>Avoid overhead watering</li>
+                                    <li>Apply copper-based fungicides preventatively</li>
+                                    <li>Plant resistant varieties when possible</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Disease 2: Tomato Early Blight -->
+        <div class="card mb-4 border-success">
+            <div class="card-header bg-success text-white">
+                <h3 class="card-title mb-0">Tomato Early Blight</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">A common fungal disease caused by Alternaria solani.</p>
+                
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Symptoms</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Dark brown to black spots with concentric rings on lower/older leaves first. Yellowing around lesions and premature leaf drop.</p>
+                                <div class="text-center">
+                                    <img src="{{ url_for('static', filename='images/diseases/tomato_early_blight.jpg') }}" alt="Tomato Early Blight" class="img-fluid rounded" style="max-height: 200px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Management</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li>Practice crop rotation</li>
+                                    <li>Maintain adequate plant spacing</li>
+                                    <li>Mulch around plants</li>
+                                    <li>Remove infected leaves</li>
+                                    <li>Apply appropriate fungicides if necessary</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Disease 3: Apple Scab -->
+        <div class="card mb-4 border-success">
+            <div class="card-header bg-success text-white">
+                <h3 class="card-title mb-0">Apple Scab</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">A fungal disease caused by Venturia inaequalis that affects apple trees.</p>
+                
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Symptoms</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Olive-green or brown spots on leaves and fruit. Severe infections cause leaf drop and fruit deformation.</p>
+                                <div class="text-center">
+                                    <img src="{{ url_for('static', filename='images/diseases/apple_scab.jpg') }}" alt="Apple Scab" class="img-fluid rounded" style="max-height: 200px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Management</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li>Proper sanitation (remove fallen leaves)</li>
+                                    <li>Plant resistant varieties</li>
+                                    <li>Apply preventative fungicidal sprays</li>
+                                    <li>Prune to improve air circulation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Disease 4: Corn Common Rust -->
+        <div class="card mb-4 border-success">
+            <div class="card-header bg-success text-white">
+                <h3 class="card-title mb-0">Corn Common Rust</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">A fungal disease caused by Puccinia sorghi.</p>
+                
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Symptoms</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Small, circular to elongated brown pustules on both leaf surfaces. Severe cases can cause leaf death.</p>
+                                <div class="text-center">
+                                    <img src="{{ url_for('static', filename='images/diseases/corn_common_rust.jpg') }}" alt="Corn Common Rust" class="img-fluid rounded" style="max-height: 200px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Management</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li>Plant resistant hybrids</li>
+                                    <li>Apply fungicides if detected early</li>
+                                    <li>Practice good field sanitation</li>
+                                    <li>Ensure proper plant spacing for air circulation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Disease 5: Potato Late Blight -->
+        <div class="card mb-4 border-success">
+            <div class="card-header bg-success text-white">
+                <h3 class="card-title mb-0">Potato Late Blight</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Caused by the same pathogen as Tomato Late Blight (Phytophthora infestans).</p>
+                
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Symptoms</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Water-soaked spots on leaves that quickly enlarge and turn brown with a white fuzzy growth. Tubers develop dark patches.</p>
+                                <div class="text-center">
+                                    <img src="{{ url_for('static', filename='images/diseases/potato_late_blight.jpg') }}" alt="Potato Late Blight" class="img-fluid rounded" style="max-height: 200px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Management</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li>Use certified disease-free seed potatoes</li>
+                                    <li>Maintain good air circulation</li>
+                                    <li>Apply preventative fungicides</li>
+                                    <li>Harvest during dry weather</li>
+                                    <li>Remove volunteer plants</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Disease 6: Grape Black Rot -->
+        <div class="card mb-4 border-success">
+            <div class="card-header bg-success text-white">
+                <h3 class="card-title mb-0">Grape Black Rot</h3>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">A fungal disease caused by Guignardia bidwellii.</p>
+                
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Symptoms</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Small, reddish-brown spots on leaves that later develop a black border. Fruit develops black rot with shriveling.</p>
+                                <div class="text-center">
+                                    <img src="{{ url_for('static', filename='images/diseases/grape_black_rot.jpg') }}" alt="Grape Black Rot" class="img-fluid rounded" style="max-height: 200px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h5 class="mb-0">Management</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul>
+                                    <li>Prune to increase air circulation</li>
+                                    <li>Remove mummified fruits</li>
+                                    <li>Apply appropriate fungicides</li>
+                                    <li>Practice good vineyard sanitation</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

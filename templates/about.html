@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}About - Plant Disease Detection{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h2 class="text-center mb-4">About Plant Disease Detection</h2>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <p class="lead">
+                    This application is designed to help identify plant diseases using deep learning technology.
+                    It uses a state-of-the-art EfficientNet model trained on the PlantVillage dataset to
+                    analyze plant leaf images and detect diseases.
+                </p>
+                <p>
+                    The model can identify diseases across multiple plant species including tomato, potato,
+                    apple, corn, grape, cherry, and more. It provides confidence scores and basic
+                    management recommendations.
+                </p>
+            </div>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="mb-0">Technical Information</h3>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item">
+                                <strong>Model Architecture:</strong> EfficientNet-B0
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Framework:</strong> PyTorch with Flask web interface
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Database:</strong> PlantVillage Dataset (>50,000 images across 38 classes)
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Training:</strong> Transfer learning from ImageNet weights
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Image Preprocessing:</strong> Resize to 224x224, normalization, data augmentation
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="mb-0">Development</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            This application was developed as part of a machine learning project focused on sustainable
+                            agriculture. The goal is to provide farmers and gardeners with an accessible tool for early
+                            disease detection, which can reduce crop losses and minimize the use of pesticides.
+                        </p>
+                        <p>
+                            The web interface is built using Flask, a lightweight Python web framework, combined
+                            with Bootstrap for responsive design. This makes the application accessible on
+                            both desktop and mobile devices.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}

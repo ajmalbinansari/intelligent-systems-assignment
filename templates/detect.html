@@ -1,0 +1,393 @@
+{% extends "base.html" %}
+
+{% block title %}Detect Disease - Plant Disease Detection{% endblock %}
+
+{% block head_extras %}
+<style>
+    #dropArea {
+        border: 3px dashed #28a745;
+        border-radius: 10px;
+        padding: 40px;
+        text-align: center;
+        background-color: #f8f9fa;
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+    #dropArea:hover, #dropArea.highlight {
+        background-color: #e2f3e5;
+    }
+    #preview {
+        max-width: 100%;
+        max-height: 300px;
+        margin-top: 20px;
+    }
+    .result-box {
+        border-left: 5px solid #28a745;
+        padding-left: 15px;
+    }
+    #loading {
+        display: none;
+    }
+    #results-container {
+        display: none;
+    }
+    .confidence-bar {
+        height: 20px;
+        background-color: #28a745;
+    }
+    .progress-label {
+        line-height: 20px;
+        color: white;
+        padding-left: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <h2 class="text-center">Plant Disease Detection</h2>
+        <p class="text-center">Upload a clear image of a plant leaf to analyze for diseases</p>
+    </div>
+</div>
+
+{% if not model_loaded %}
+<div class="alert alert-warning" role="alert">
+    <h4 class="alert-heading">Warning: Model Not Loaded</h4>
+    <p>The disease detection model has not been loaded. Analysis functionality will not work.</p>
+    <hr>
+    <p class="mb-0">Please check the server logs for more information or visit the <a href="{{ url_for('train') }}" class="alert-link">training page</a>.</p>
+</div>
+{% endif %}
+
+<div class="row">
+    <!-- Image Upload Section -->
+    <div class="col-md-6">
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">Leaf Image</h5>
+            </div>
+            <div class="card-body">
+                <div id="dropArea">
+                    <img src="{{ url_for('static', filename='images/upload.svg') }}" alt="Upload" width="64" height="64">
+                    <h5 class="mt-3">Drop your image here</h5>
+                    <p>or</p>
+                    <input type="file" id="fileInput" accept=".jpg, .jpeg, .png" class="d-none">
+                    <button id="browseBtn" class="btn btn-success">Browse Files</button>
+                </div>
+                <div class="text-center mt-3">
+                    <img id="preview" class="d-none">
+                </div>
+                <div id="loading" class="text-center mt-3">
+                    <div class="spinner-border text-success" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Analyzing image...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Results Section -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0">Analysis Results</h5>
+            </div>
+            <div class="card-body">
+                <div id="initial-message">
+                    <p class="text-center text-muted my-5">
+                        Upload an image to see analysis results here
+                    </p>
+                </div>
+                
+                <div id="results-container">
+                    <div class="result-box mb-4">
+                        <h4 id="plant-name"></h4>
+                        <div id="health-status" class="mb-3"></div>
+                        <div id="disease-name" class="mb-3"></div>
+                        <div class="mb-3">
+                            <p><strong>Confidence:</strong></p>
+                            <div class="progress">
+                                <div id="confidence-bar" class="confidence-bar" role="progressbar">
+                                    <span class="progress-label" id="confidence-text"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <h5 class="mb-3">Top Predictions</h5>
+                    <div id="top-predictions" class="mb-4"></div>
+                    
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <h5 class="mb-0">Recommendation</h5>
+                        </div>
+                        <div class="card-body">
+                            <p id="recommendation"></p>
+                        </div>
+                    </div>
+                    
+                    <button id="download-btn" class="btn btn-outline-success">Download Report</button>
+                    <button id="new-analysis-btn" class="btn btn-success">New Analysis</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropArea = document.getElementById('dropArea');
+        const fileInput = document.getElementById('fileInput');
+        const browseBtn = document.getElementById('browseBtn');
+        const preview = document.getElementById('preview');
+        const loading = document.getElementById('loading');
+        const initialMessage = document.getElementById('initial-message');
+        const resultsContainer = document.getElementById('results-container');
+        const plantName = document.getElementById('plant-name');
+        const healthStatus = document.getElementById('health-status');
+        const diseaseName = document.getElementById('disease-name');
+        const confidenceBar = document.getElementById('confidence-bar');
+        const confidenceText = document.getElementById('confidence-text');
+        const topPredictions = document.getElementById('top-predictions');
+        const recommendation = document.getElementById('recommendation');
+        const downloadBtn = document.getElementById('download-btn');
+        const newAnalysisBtn = document.getElementById('new-analysis-btn');
+        
+        let currentFile = null;
+        let analysisResults = null;
+        
+        // Prevent default behavior for drag and drop
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, preventDefaults, false);
+        });
+        
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        
+        // Highlight drop area on drag events
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropArea.addEventListener(eventName, highlight, false);
+        });
+        
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropArea.addEventListener(eventName, unhighlight, false);
+        });
+        
+        function highlight() {
+            dropArea.classList.add('highlight');
+        }
+        
+        function unhighlight() {
+            dropArea.classList.remove('highlight');
+        }
+        
+        // Handle file drop
+        dropArea.addEventListener('drop', handleDrop, false);
+        
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            
+            if (files.length > 0) {
+                handleFiles(files);
+            }
+        }
+        
+        // Handle file selection via browse button
+        browseBtn.addEventListener('click', () => {
+            fileInput.click();
+        });
+        
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                handleFiles(fileInput.files);
+            }
+        });
+        
+        function handleFiles(files) {
+            const file = files[0];
+            
+            // Check if it's an image
+            if (!file.type.match('image.*')) {
+                alert('Please select an image file (JPG, JPEG, or PNG)');
+                return;
+            }
+            
+            currentFile = file;
+            
+            // Display preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.classList.remove('d-none');
+                dropArea.classList.add('d-none');
+            };
+            reader.readAsDataURL(file);
+            
+            // Upload and analyze
+            uploadAndAnalyze(file);
+        }
+        
+        function uploadAndAnalyze(file) {
+            // Show loading spinner
+            loading.style.display = 'block';
+            initialMessage.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Hide loading spinner
+                loading.style.display = 'none';
+                
+                if (data.error) {
+                    alert('Error1: ' + data.error);
+                    return;
+                }
+                
+                // Store results
+                analysisResults = data;
+                
+                // Display results
+                displayResults(data);
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                alert('Error: ' + error.message);
+                console.error('Error:', error);
+            });
+        }
+        
+        function displayResults(data) {
+            // Hide initial message, show results
+            initialMessage.style.display = 'none';
+            resultsContainer.style.display = 'block';
+            
+            // Set plant name
+            plantName.textContent = data.plant;
+            
+            // Set health status
+            if (data.is_healthy) {
+                healthStatus.innerHTML = '<div class="alert alert-success">Status: Healthy </div>';
+                diseaseName.innerHTML = '';
+            } else {
+                healthStatus.innerHTML = '<div class="alert alert-warning">Status: Disease Detected </div>';
+                diseaseName.innerHTML = `<p><strong>Disease:</strong> ${data.disease}</p>`;
+            }
+            
+            // Set confidence
+            const confidenceValue = data.confidence.toFixed(2);
+            confidenceBar.style.width = `${confidenceValue}%`;
+            confidenceText.textContent = `${confidenceValue}%`;
+            
+            // Set top predictions
+            let predictionsHtml = '<div class="list-group">';
+            data.top_predictions.forEach((pred, i) => {
+                predictionsHtml += `
+                    <div class="list-group-item">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">${i+1}. ${pred.class}</h6>
+                            <span>${pred.probability.toFixed(2)}%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: ${pred.probability}%" 
+                                 aria-valuenow="${pred.probability}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                `;
+            });
+            predictionsHtml += '</div>';
+            topPredictions.innerHTML = predictionsHtml;
+            
+            // Set recommendation
+            if (data.is_healthy) {
+                recommendation.textContent = "Your plant appears healthy! Continue with regular care and monitoring.";
+            } else {
+                recommendation.innerHTML = `Your plant may have ${data.disease}. Consider:<br>
+                • Isolating the affected plant<br>
+                • Removing severely infected leaves<br>
+                • Consulting with an agricultural expert<br>
+                • Applying appropriate treatments`;
+            }
+        }
+        
+        // Download results as text file
+        downloadBtn.addEventListener('click', () => {
+            if (!analysisResults) return;
+            
+            const plant = analysisResults.plant;
+            const filename = `plant_analysis_${plant.toLowerCase().replace(/\s+/g, '_')}.txt`;
+            
+            let content = "Plant Disease Analysis Results\n";
+            content += `Date: ${analysisResults.timestamp}\n\n`;
+            content += `Plant: ${plant}\n`;
+            
+            if (analysisResults.is_healthy) {
+                content += "Status: Healthy\n";
+            } else {
+                content += "Status: Disease Detected\n";
+                content += `Disease: ${analysisResults.disease}\n`;
+            }
+            
+            content += `Confidence: ${analysisResults.confidence.toFixed(2)}%\n\n`;
+            
+            content += "Top Predictions:\n";
+            analysisResults.top_predictions.forEach((pred, i) => {
+                content += `${i+1}. ${pred.class} (${pred.probability.toFixed(2)}%)\n`;
+            });
+            
+            content += "\nRecommendation:\n";
+            if (analysisResults.is_healthy) {
+                content += "Your plant appears healthy! Continue with regular care and monitoring.";
+            } else {
+                content += `Your plant may have ${analysisResults.disease}. Consider:\n`;
+                content += "• Isolating the affected plant\n";
+                content += "• Removing severely infected leaves\n";
+                content += "• Consulting with an agricultural expert\n";
+                content += "• Applying appropriate treatments";
+            }
+            
+            // Create download link
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+        
+        // New analysis button
+        newAnalysisBtn.addEventListener('click', () => {
+            // Reset UI
+            preview.classList.add('d-none');
+            dropArea.classList.remove('d-none');
+            initialMessage.style.display = 'block';
+            resultsContainer.style.display = 'none';
+            
+            // Reset file input
+            fileInput.value = '';
+            currentFile = null;
+        });
+    });
+</script>
+{% endblock %}

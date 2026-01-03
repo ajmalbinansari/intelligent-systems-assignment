@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Plant Disease Detection{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="jumbotron p-4 mb-4 bg-light rounded-3">
+            <h1 class="display-4">Plant Disease Detection</h1>
+            <p class="lead">
+                Welcome to the Plant Disease Detection application! This tool helps identify diseases in plant leaves
+                using advanced AI technology.
+            </p>
+            <hr class="my-4">
+            <p>
+                Simply upload a clear image of a plant leaf, and the system will analyze it to
+                detect potential diseases and provide recommendations. The system currently supports
+                multiple plant types including tomato, potato, apple, corn, grape, cherry, and more.
+            </p>
+            <p class="lead">
+                <a class="btn btn-success btn-lg" href="{{ url_for('detect') }}" role="button">Get Started</a>
+            </p>
+        </div>
+        
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">Quick Start Guide</h5>
+                    </div>
+                    <div class="card-body">
+                        <ol class="list-group list-group-numbered mb-0">
+                            <li class="list-group-item border-0">Click on the 'Detect Disease' tab above</li>
+                            <li class="list-group-item border-0">Upload a plant leaf photo</li>
+                            <li class="list-group-item border-0">The system will automatically analyze the image</li>
+                            <li class="list-group-item border-0">View the results and recommendations</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">System Status</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            <strong>Model status:</strong> 
+                            {% if model_loaded %}
+                                <span class="text-success">Loaded and ready</span>
+                            {% else %}
+                                <span class="text-danger">Not loaded - check server logs</span>
+                            {% endif %}
+                        </p>
+                        <p><strong>Using device:</strong> {{ device }}</p>
+                        <p><strong>Features:</strong></p>
+                        <ul>
+                            <li>High-accuracy disease detection</li>
+                            <li>Support for multiple plant species</li>
+                            <li>Detailed recommendations</li>
+                            <li>Educational information about plant diseases</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="card-title mb-0">Supported Plants</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">Tomato</li>
+                                    <li class="list-group-item">Potato</li>
+                                    <li class="list-group-item">Apple</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">Corn</li>
+                                    <li class="list-group-item">Grape</li>
+                                    <li class="list-group-item">Cherry</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-4">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">Strawberry</li>
+                                    <li class="list-group-item">Pepper</li>
+                                    <li class="list-group-item">And more...</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

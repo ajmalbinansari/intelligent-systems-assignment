@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+
+# Dataset (too large for git)
+dataset/
+
+# Model files (large binary files)
+*.pth
+*.npy
+
+# Generated images (can be regenerated)
+*.png
